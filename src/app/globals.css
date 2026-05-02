@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0f172a;
 }
 
 @theme inline {
@@ -10,14 +10,23 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Kubi brand palette */
+  --color-kubi-teal: #0d9488;
+  --color-kubi-teal-light: #14b8a6;
+  --color-kubi-teal-dark: #0f766e;
+  --color-kubi-navy: #0f172a;
+  --color-kubi-blue: #1e40af;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* PWA — disable pull-to-refresh and text selection on portal */
+.pwa-portal {
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+  touch-action: manipulation;
 }
+
 
 body {
   background: var(--background);
