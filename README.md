@@ -474,7 +474,7 @@ Definidos en `src/types/api.ts`, reflejan los modelos Mongoose del backend:
 - `Partner` — negocio afiliado (wallet, categoría, ubicación GeoJSON, estado)
 - `Driver` — conductor (balance, qr_code_id, ubicación GeoJSON)
 - `Promotion` — promoción (título, descripción, reward_value, commission_per_lead, fechas)
-- `Lead` — registro de visita de pasajero (commission_amount, driver_amount 85%, platform_fee 15%)
+- `Lead` — registro de visita de pasajero (commission_amount, driver_amount 80%, platform_fee 20%)
 - `SessionUser` — subconjunto de usuario guardado en cookie (\_id, email, business_name, role)
 - `GeoPoint` — `{ type: "Point", coordinates: [lon, lat] }` (GeoJSON estándar)
 

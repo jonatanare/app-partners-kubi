@@ -65,9 +65,9 @@ export interface Lead {
   status: "pending" | "completed";
   validation_code: string;
   commission_amount: number;
-  /** 85% of commission_amount — set when lead is completed, 0 while pending */
+  /** 80% of commission_amount — set when lead is completed, 0 while pending */
   driver_amount: number;
-  /** 15% of commission_amount — set when lead is completed, 0 while pending */
+  /** 20% of commission_amount — set when lead is completed, 0 while pending */
   platform_fee_amount: number;
   createdAt: string;
   updatedAt: string;

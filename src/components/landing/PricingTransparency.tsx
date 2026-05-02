@@ -1,8 +1,8 @@
 import { DollarSign, Car, Building2 } from "lucide-react";
 
 const EXAMPLE_AMOUNT = 10;
-const DRIVER_PCT = 0.85;
-const PLATFORM_PCT = 0.15;
+const DRIVER_PCT = 0.8;
+const PLATFORM_PCT = 0.2;
 
 const driverAmount = (EXAMPLE_AMOUNT * DRIVER_PCT).toFixed(2);
 const platformAmount = (EXAMPLE_AMOUNT * PLATFORM_PCT).toFixed(2);
@@ -21,18 +21,18 @@ const CARDS = [
     Icon: Car,
     label: "El conductor recibe",
     value: `$${driverAmount} MXN`,
-    sublabel: "85% de tu comisión",
+    sublabel: "80% de tu comisión",
     description:
-      "El conductor que recomendó tu negocio recibe el 85% directamente. Por eso tienen un incentivo real de enviarte clientes.",
+      "El conductor que recomendó tu negocio recibe el 80% directamente. Por eso tienen un incentivo real de enviarte clientes.",
     color: "emerald",
   },
   {
     Icon: Building2,
     label: "Kubi retiene",
     value: `$${platformAmount} MXN`,
-    sublabel: "15% como costo de plataforma",
+    sublabel: "20% como costo de plataforma",
     description:
-      "El 15% cubre la operación de la plataforma: tecnología, soporte y la red de conductores que trae los clientes.",
+      "El 20% cubre la operación de la plataforma: tecnología, soporte y la red de conductores que trae los clientes.",
     color: "slate",
   },
 ] as const;
@@ -58,7 +58,7 @@ const COLOR_MAP = {
   },
 };
 
-export function PricingTransparency() {
+export function PricingTransparencyDos() {
   return (
     <section id="precios" className="bg-white py-20 sm:py-28">
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -114,15 +114,15 @@ export function PricingTransparency() {
           <div className="flex rounded-xl overflow-hidden h-10 mb-4">
             <div
               className="bg-emerald-400 flex items-center justify-center text-white text-xs font-bold"
-              style={{ width: "85%" }}
+              style={{ width: "80%" }}
             >
-              85% conductor
+              80% conductor
             </div>
             <div
               className="bg-teal-600 flex items-center justify-center text-white text-xs font-bold"
-              style={{ width: "15%" }}
+              style={{ width: "20%" }}
             >
-              15%
+              20%
             </div>
           </div>
 
