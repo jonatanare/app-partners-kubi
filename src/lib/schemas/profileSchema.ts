@@ -13,7 +13,7 @@ export const profileSchema = z.object({
   category: z.enum(PARTNER_CATEGORIES, {
     message: "Selecciona una categoría válida",
   }),
-  manager_name: z.string().min(2, "Mínimo 2 caracteres"),
+  manager_name: z.string().min(2, "Mínimo 2 caracteres").optional(),
   phone: z.string().optional(),
   address: z.string().optional(),
   website: z

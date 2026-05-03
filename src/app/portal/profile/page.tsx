@@ -25,7 +25,7 @@ export default function ProfilePage() {
   const { data, isLoading, isError } = useProfile();
   const { mutate: updateProfile, isPending, isSuccess, error } = useUpdateProfile();
 
-  const partner = data?.partner;
+  const partner = data;
 
   const {
     register,
@@ -50,7 +50,7 @@ export default function ProfilePage() {
       reset({
         business_name: partner.business_name ?? "",
         category: (partner.category as ProfileFormValues["category"]) ?? "other",
-        manager_name: "",
+        manager_name: partner.manager_name ?? "",
         phone: partner.contact_info?.phone ?? "",
         address: partner.contact_info?.address ?? "",
         website: partner.contact_info?.website ?? "",
@@ -62,7 +62,7 @@ export default function ProfilePage() {
     updateProfile({
       business_name: values.business_name,
       category: values.category,
-      manager_name: values.manager_name,
+      manager_name: values.manager_name || undefined,
       contact_info: {
         phone: values.phone || undefined,
         address: values.address || undefined,

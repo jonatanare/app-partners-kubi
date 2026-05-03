@@ -11,7 +11,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const res = await fetch(`${API_BASE}/api/v1/partners/me`, {
+  const res = await fetch(`${API_BASE}/api/v1/partners/profile`, {
     headers: { Authorization: `Bearer ${token}` },
     cache: "no-store",
   });
@@ -30,7 +30,7 @@ export async function PATCH(request: Request) {
 
   const body = await request.json();
 
-  const res = await fetch(`${API_BASE}/api/v1/partners/me`, {
+  const res = await fetch(`${API_BASE}/api/v1/partners/profile`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -43,3 +43,4 @@ export async function PATCH(request: Request) {
   const data = await res.json();
   return NextResponse.json(data, { status: res.status });
 }
+

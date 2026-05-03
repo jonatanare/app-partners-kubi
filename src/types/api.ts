@@ -20,6 +20,7 @@ export interface Partner {
   business_name: string;
   category: string;
   email: string;
+  manager_name?: string;
   contact_info?: ContactInfo;
   location: GeoPoint;
   status: "active" | "inactive";
@@ -153,9 +154,8 @@ export interface ApiErrorBody {
 
 // ─── Partner profile ──────────────────────────────────────────────────────────
 
-export interface ProfileResponse {
-  partner: Partner;
-}
+// Backend returns the partner object directly (no wrapper key)
+export type ProfileResponse = Partner;
 
 export interface UpdateProfilePayload {
   business_name?: string;
