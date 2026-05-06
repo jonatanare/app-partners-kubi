@@ -30,14 +30,22 @@ export interface Partner {
   updatedAt: string;
 }
 
+/** Tier earned by monthly validated lead count. Resets on the 1st of each month. */
+export type DriverTier = "Base" | "Plata" | "Oro";
+
 export interface Driver {
   _id: string;
   name: string;
   email: string;
   phone: string;
+  platform?: "Uber" | "DiDi" | "InDrive" | "Otro";
   qr_code_id: string;
   balance: number;
   status: "active" | "inactive";
+  /** Total leads validated in the current calendar month. */
+  monthly_conversions: number;
+  /** Tier based on monthly_conversions: Base (0–14), Plata (15–39), Oro (40+). */
+  current_tier: DriverTier;
   role: "driver";
   location: GeoPoint;
   createdAt: string;
@@ -66,9 +74,9 @@ export interface Lead {
   status: "pending" | "completed";
   validation_code: string;
   commission_amount: number;
-  /** 80% of commission_amount — set when lead is completed, 0 while pending */
+  /** Tier-based driver share: Base=50%, Plata=55%, Oro=60%. 0 while pending. */
   driver_amount: number;
-  /** 20% of commission_amount — set when lead is completed, 0 while pending */
+  /** Kubi's share: Base=50%, Plata=45%, Oro=40%. 0 while pending. */
   platform_fee_amount: number;
   createdAt: string;
   updatedAt: string;

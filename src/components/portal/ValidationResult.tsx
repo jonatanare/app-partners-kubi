@@ -11,6 +11,16 @@ interface ValidationResultProps {
   onDismiss: () => void;
 }
 
+/**
+ * Returns a dynamic split label based on the actual amounts stored on the lead.
+ * Avoids hardcoding percentages since the split varies by driver tier.
+ */
+function getSplitLabel(driverAmount: number, commissionAmount: number): string {
+  if (commissionAmount === 0) return "";
+  const pct = Math.round((driverAmount / commissionAmount) * 100);
+  return `${pct}% al conductor · ${100 - pct}% a Kubi`;
+}
+
 export function ValidationResult({
   isOpen,
   type,
@@ -61,6 +71,11 @@ export function ValidationResult({
                 <p className="text-3xl font-bold">
                   ${lead.commission_amount.toFixed(2)}
                 </p>
+                {lead.status === "completed" && lead.commission_amount > 0 && (
+                  <p className="text-xs opacity-70 mt-1">
+                    {getSplitLabel(lead.driver_amount, lead.commission_amount)}
+                  </p>
+                )}
                 <p className="text-xs opacity-70 mt-2 font-mono">
                   Código: {lead.validation_code}
                 </p>
