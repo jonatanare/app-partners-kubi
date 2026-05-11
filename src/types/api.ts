@@ -26,6 +26,10 @@ export interface Partner {
   status: "active" | "inactive";
   role: "partner";
   wallet_balance: number;
+  /** Zona horaria IANA. Por defecto "America/Cancun" si no se configuró. */
+  timezone: string;
+  /** Horarios de apertura por día. Ausente si nunca se configuraron. */
+  opening_hours?: OpeningHours;
   createdAt: string;
   updatedAt: string;
 }
@@ -170,4 +174,26 @@ export interface UpdateProfilePayload {
   category?: string;
   manager_name?: string;
   contact_info?: ContactInfo;
+  opening_hours?: OpeningHours;
+  timezone?: string;
+}
+
+// ─── Opening Hours ────────────────────────────────────────────────────────────
+
+/** Horario de un día. null = cerrado ese día, undefined = no configurado. */
+export type DaySchedule = { open: string; close: string } | null;
+
+export interface OpeningHours {
+  monday?:    DaySchedule;
+  tuesday?:   DaySchedule;
+  wednesday?: DaySchedule;
+  thursday?:  DaySchedule;
+  friday?:    DaySchedule;
+  saturday?:  DaySchedule;
+  sunday?:    DaySchedule;
+}
+
+export interface UpdateOpeningHoursPayload {
+  opening_hours?: OpeningHours;
+  timezone?: string;
 }

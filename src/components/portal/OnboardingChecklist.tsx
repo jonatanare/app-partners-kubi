@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { CheckCircle2, Circle, Wallet, Megaphone, QrCode, X, ChevronRight } from "lucide-react";
+import { CheckCircle2, Circle, Wallet, Megaphone, QrCode, Clock, X, ChevronRight } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDashboard } from "@/lib/hooks/useDashboard";
+import { useProfile } from "@/lib/hooks/useProfile";
 import { getSupportWhatsAppUrl } from "@/lib/config";
 
 const STORAGE_KEY = "kubi_onboarding_done";
@@ -21,6 +22,7 @@ interface Step {
 export function OnboardingChecklist() {
   const queryClient = useQueryClient();
   const { data } = useDashboard();
+  const { data: profile } = useProfile();
   const [dismissed, setDismissed] = useState<boolean | null>(null);
 
   // Read localStorage only on client to avoid SSR mismatch
@@ -46,12 +48,13 @@ export function OnboardingChecklist() {
   const walletBalance = data?.wallet_balance ?? 0;
   const activePromotions = data?.active_promotions ?? 0;
   const completedLeads = data?.completed_leads ?? 0;
+  const hasOpeningHours = !!profile?.opening_hours;
 
   const whatsappUrl = getSupportWhatsAppUrl(
     "Hola, quiero recargar mi wallet para empezar a usar Kubi."
   );
 
-  const allDone = walletBalance > 0 && activePromotions > 0 && completedLeads > 0;
+  const allDone = walletBalance > 0 && activePromotions > 0 && completedLeads > 0 && hasOpeningHours;
 
   const steps: Step[] = [
     {
@@ -103,6 +106,23 @@ export function OnboardingChecklist() {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 hover:text-teal-800 transition-colors"
         >
           Ver pantalla de validación
+          <ChevronRight className="w-3.5 h-3.5" />
+        </Link>
+      ),
+    },
+    {
+      id: "opening_hours",
+      icon: Clock,
+      title: "Configura tus horarios",
+      description:
+        "Los pasajeros ven si tu negocio está abierto antes de salir. Negocios con horarios reciben más visitas.",
+      isDone: hasOpeningHours,
+      cta: (
+        <Link
+          href="/portal/profile"
+          className="inline-flex items-center gap-1.5 text-xs font-semibold text-teal-600 hover:text-teal-800 transition-colors"
+        >
+          Ir a Mi negocio
           <ChevronRight className="w-3.5 h-3.5" />
         </Link>
       ),

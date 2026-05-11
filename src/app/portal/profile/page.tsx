@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building2, Mail, Phone, MapPin, Globe, Save } from "lucide-react";
+import { Building2, Mail, Phone, MapPin, Globe, Save, Store } from "lucide-react";
 import { useProfile, useUpdateProfile } from "@/lib/hooks/useProfile";
 import {
   profileSchema,
@@ -12,6 +12,7 @@ import {
 } from "@/lib/schemas/profileSchema";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { OpeningHoursForm } from "@/components/portal/OpeningHoursForm";
 
 const CATEGORY_LABELS: Record<(typeof PARTNER_CATEGORIES)[number], string> = {
   restaurant: "Restaurante",
@@ -44,7 +45,7 @@ export default function ProfilePage() {
     },
   });
 
-  // Populate form once data loads
+  // Poblar el formulario cuando llegan los datos del perfil
   useEffect(() => {
     if (partner) {
       reset({
@@ -88,131 +89,151 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-8">
+    <div className="p-5 sm:p-8 max-w-5xl">
+      {/* Encabezado */}
+      <div className="mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Mi negocio</h1>
         <p className="text-slate-500 text-sm mt-1">
           Actualiza los datos de tu negocio registrado en Kubi.
         </p>
       </div>
 
-      {/* Read-only info */}
-      <div className="bg-slate-50 rounded-2xl border border-slate-100 p-5 mb-6 flex flex-col gap-3">
-        <div className="flex items-center gap-3 text-sm">
+      {/* Fila de estado — pills compactos */}
+      <div className="flex flex-wrap gap-3 mb-6">
+        <div className="flex items-center gap-2 bg-white border border-slate-100 rounded-xl px-4 py-2.5 text-sm shadow-sm">
           <Mail className="w-4 h-4 text-slate-400 shrink-0" />
           <span className="text-slate-500">Correo:</span>
           <span className="text-slate-900 font-medium">{partner?.email}</span>
         </div>
-        <div className="flex items-center gap-3 text-sm">
+        <div className="flex items-center gap-2 bg-white border border-slate-100 rounded-xl px-4 py-2.5 text-sm shadow-sm">
           <Building2 className="w-4 h-4 text-slate-400 shrink-0" />
           <span className="text-slate-500">Estado:</span>
           <span
-            className={`font-medium ${
-              partner?.status === "active" ? "text-teal-600" : "text-slate-400"
-            }`}
+            className={`font-medium ${partner?.status === "active" ? "text-teal-600" : "text-slate-400"
+              }`}
           >
             {partner?.status === "active" ? "Activo" : "Inactivo"}
           </span>
         </div>
       </div>
 
-      {/* Edit form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-        <Input
-          label="Nombre del negocio"
-          placeholder="Ej: Tacos el Güero"
-          error={errors.business_name?.message}
-          {...register("business_name")}
-        />
+      {/* Cuadrícula principal: datos del negocio | horarios */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
 
-        {/* Category select */}
-        <div className="flex flex-col gap-1">
-          <label htmlFor="category" className="text-sm font-medium text-slate-700">
-            Categoría
-          </label>
-          <select
-            id="category"
-            className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm text-slate-900 bg-white focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-colors"
-            {...register("category")}
-          >
-            {PARTNER_CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {CATEGORY_LABELS[c]}
-              </option>
-            ))}
-          </select>
-          {errors.category && (
-            <p className="text-xs text-red-500">{errors.category.message}</p>
-          )}
-        </div>
-
-        <Input
-          label="Nombre del encargado"
-          placeholder="Ej: Juan Pérez"
-          error={errors.manager_name?.message}
-          {...register("manager_name")}
-        />
-
-        <div className="border-t border-slate-100 pt-4">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-4">
-            Información de contacto (opcional)
-          </p>
-          <div className="flex flex-col gap-4">
-            <div className="relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none mt-px" />
-              <Input
-                placeholder="Teléfono"
-                className="pl-9"
-                error={errors.phone?.message}
-                {...register("phone")}
-              />
-            </div>
-            <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none mt-px" />
-              <Input
-                placeholder="Dirección"
-                className="pl-9"
-                error={errors.address?.message}
-                {...register("address")}
-              />
-            </div>
-            <div className="relative">
-              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none mt-px" />
-              <Input
-                placeholder="Sitio web (https://...)"
-                className="pl-9"
-                error={errors.website?.message}
-                {...register("website")}
-              />
-            </div>
+        {/* ── Columna izquierda: formulario de datos ── */}
+        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
+          <div className="flex items-center gap-2 mb-5">
+            <Store className="h-5 w-5 text-teal-600" />
+            <h2 className="text-base font-semibold text-slate-800">Datos del negocio</h2>
           </div>
+
+          <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+            {/* Nombre y categoría en fila */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Nombre del negocio"
+                placeholder="Ej: Tacos el Güero"
+                error={errors.business_name?.message}
+                {...register("business_name")}
+              />
+
+              <div className="flex flex-col gap-1">
+                <label htmlFor="category" className="text-sm font-medium text-slate-700">
+                  Categoría
+                </label>
+                <select
+                  id="category"
+                  className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm text-slate-900 bg-white focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-colors"
+                  {...register("category")}
+                >
+                  {PARTNER_CATEGORIES.map((c) => (
+                    <option key={c} value={c}>
+                      {CATEGORY_LABELS[c]}
+                    </option>
+                  ))}
+                </select>
+                {errors.category && (
+                  <p className="text-xs text-red-500">{errors.category.message}</p>
+                )}
+              </div>
+            </div>
+
+            <Input
+              label="Nombre del encargado"
+              placeholder="Ej: Juan Pérez"
+              error={errors.manager_name?.message}
+              {...register("manager_name")}
+            />
+
+            {/* Información de contacto */}
+            <div className="border-t border-slate-100 pt-4">
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-3">
+                Contacto (opcional)
+              </p>
+              <div className="flex flex-col gap-3">
+                {/* Teléfono y dirección en fila */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none mt-px" />
+                    <Input
+                      placeholder="Teléfono"
+                      className="pl-9"
+                      error={errors.phone?.message}
+                      {...register("phone")}
+                    />
+                  </div>
+                  <div className="relative">
+                    <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none mt-px" />
+                    <Input
+                      placeholder="Dirección"
+                      className="pl-9"
+                      error={errors.address?.message}
+                      {...register("address")}
+                    />
+                  </div>
+                </div>
+                <div className="relative">
+                  <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none mt-px" />
+                  <Input
+                    placeholder="Sitio web (https://...)"
+                    className="pl-9"
+                    error={errors.website?.message}
+                    {...register("website")}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Error del servidor */}
+            {error && (
+              <p className="text-sm text-red-500 bg-red-50 rounded-xl px-4 py-3">
+                No se pudo guardar. Intenta de nuevo.
+              </p>
+            )}
+
+            {/* Éxito */}
+            {isSuccess && !isDirty && (
+              <p className="text-sm text-teal-700 bg-teal-50 rounded-xl px-4 py-3">
+                Cambios guardados correctamente.
+              </p>
+            )}
+
+            <div className="flex justify-end pt-1">
+              <Button
+                type="submit"
+                loading={isPending}
+                disabled={!isDirty || isPending}
+              >
+                <Save className="w-4 h-4" />
+                {isPending ? "Guardando..." : "Guardar cambios"}
+              </Button>
+            </div>
+          </form>
         </div>
 
-        {/* API error */}
-        {error && (
-          <p className="text-sm text-red-500 bg-red-50 rounded-xl px-4 py-3">
-            No se pudo guardar. Intenta de nuevo.
-          </p>
-        )}
-
-        {/* Success */}
-        {isSuccess && !isDirty && (
-          <p className="text-sm text-teal-700 bg-teal-50 rounded-xl px-4 py-3">
-            Cambios guardados correctamente.
-          </p>
-        )}
-
-        <Button
-          type="submit"
-          loading={isPending}
-          disabled={!isDirty || isPending}
-          className="w-full"
-        >
-          <Save className="w-4 h-4" />
-          Guardar cambios
-        </Button>
-      </form>
+        {/* ── Columna derecha: horarios ── */}
+        <OpeningHoursForm />
+      </div>
     </div>
   );
 }

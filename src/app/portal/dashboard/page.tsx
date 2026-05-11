@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DashboardMetrics } from "@/components/portal/DashboardMetrics";
 import { OnboardingChecklist } from "@/components/portal/OnboardingChecklist";
+import { OpeningHoursNudge } from "@/components/portal/OpeningHoursNudge";
 
 export const metadata: Metadata = {
   title: "Dashboard — Kubi Partners",
@@ -16,6 +17,7 @@ export default function DashboardPage() {
         </p>
       </div>
       <OnboardingChecklist />
+      <OpeningHoursNudge />
       <DashboardMetrics />
     </div>
   );

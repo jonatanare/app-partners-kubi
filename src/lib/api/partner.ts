@@ -9,6 +9,7 @@ import type {
   LeadsResponse,
   ProfileResponse,
   UpdateProfilePayload,
+  UpdateOpeningHoursPayload,
 } from "@/types/api";
 
 // ─── Validation ───────────────────────────────────────────────────────────────
@@ -113,4 +114,12 @@ export async function callUpdateProfile(
   return data;
 }
 
+// ─── Opening Hours ────────────────────────────────────────────────────────────
+
+export async function callUpdateOpeningHours(
+  payload: UpdateOpeningHoursPayload
+): Promise<ProfileResponse> {
+  // Delega al PATCH del perfil, que acepta actualizaciones parciales
+  return callUpdateProfile(payload);
+}
 
