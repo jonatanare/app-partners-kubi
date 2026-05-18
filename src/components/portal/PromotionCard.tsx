@@ -88,6 +88,13 @@ export function PromotionCard({
         </div>
       </div>
 
+      {/* Badge de límite diario — REQ-3 */}
+      {promotion.max_leads_per_day !== null && promotion.max_leads_per_day !== undefined && (
+        <span className="self-start text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2 py-0.5 rounded-full">
+          Máx. {promotion.max_leads_per_day} / día
+        </span>
+      )}
+
       {/* Actions */}
       <div className="flex flex-wrap gap-2 pt-1 border-t border-slate-50">
         <Button

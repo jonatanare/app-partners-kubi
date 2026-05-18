@@ -23,6 +23,14 @@ export const profileSchema = z.object({
       (v) => !v || v === "" || /^https?:\/\/.+/.test(v),
       "Ingresa una URL válida (https://...)"
     ),
+  /** URL de la ficha de Google My Business. Opcional, debe ser URL válida si se proporciona. */
+  google_maps_url: z
+    .string()
+    .optional()
+    .refine(
+      (v) => !v || v === "" || /^https?:\/\/.+/.test(v),
+      "Ingresa una URL válida (https://...)"
+    ),
 });
 
 export type ProfileFormValues = z.infer<typeof profileSchema>;

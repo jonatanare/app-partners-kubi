@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
 import { promotionSchema, type PromotionFormData } from "@/lib/schemas/promotionSchema";
@@ -41,10 +41,16 @@ export function PromotionForm({
     register,
     handleSubmit,
     reset,
+    setValue,
+    control,
     formState: { errors },
   } = useForm<PromotionFormData>({
     resolver: zodResolver(promotionSchema),
   });
+
+  // Observar el campo para saber si el límite diario está activo
+  const watchedMaxLeads = useWatch({ control, name: "max_leads_per_day" });
+  const hasLimit = watchedMaxLeads != null;
 
   // Populate form when editing
   useEffect(() => {
@@ -57,6 +63,7 @@ export function PromotionForm({
           commission_per_lead: promotion.commission_per_lead,
           valid_from: toDatetimeLocal(promotion.valid_from),
           valid_until: toDatetimeLocal(promotion.valid_until),
+          max_leads_per_day: promotion.max_leads_per_day ?? null,
         });
       } else {
         reset({
@@ -66,6 +73,7 @@ export function PromotionForm({
           commission_per_lead: undefined,
           valid_from: "",
           valid_until: "",
+          max_leads_per_day: null,
         });
       }
     }
@@ -159,6 +167,65 @@ export function PromotionForm({
               error={errors.valid_until?.message}
               {...register("valid_until")}
             />
+          </div>
+
+          {/* Límite diario de cupones — REQ-3 */}
+          <div className="flex flex-col gap-2 rounded-xl bg-slate-50 border border-slate-200 px-4 py-3">
+            <div className="flex items-center gap-2.5">
+              <input
+                type="checkbox"
+                id="daily-cap-toggle"
+                checked={hasLimit}
+                onChange={(e) =>
+                  setValue(
+                    "max_leads_per_day",
+                    e.target.checked ? 10 : null,
+                    { shouldValidate: true }
+                  )
+                }
+                className="w-4 h-4 accent-teal-600 cursor-pointer"
+              />
+              <label
+                htmlFor="daily-cap-toggle"
+                className="text-sm font-medium text-slate-700 cursor-pointer"
+              >
+                Activar límite diario de cupones
+              </label>
+            </div>
+
+            {hasLimit && (
+              <div className="flex flex-col gap-1 pl-6">
+                <label
+                  htmlFor="daily-cap-value"
+                  className="text-xs font-medium text-slate-500"
+                >
+                  Máximo de activaciones por 24 horas
+                </label>
+                <input
+                  id="daily-cap-value"
+                  type="number"
+                  min={1}
+                  step={1}
+                  value={typeof watchedMaxLeads === "number" ? watchedMaxLeads : ""}
+                  onChange={(e) => {
+                    const n = Number.parseInt(e.target.value, 10);
+                    if (!Number.isNaN(n) && n >= 1)
+                      setValue("max_leads_per_day", n, { shouldValidate: true });
+                  }}
+                  className="w-32 rounded-xl border border-slate-300 px-3 py-1.5 text-sm text-slate-900 focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500/20 transition-colors"
+                  placeholder="Ej: 20"
+                />
+                {errors.max_leads_per_day && (
+                  <p className="text-xs text-red-500">{errors.max_leads_per_day.message}</p>
+                )}
+              </div>
+            )}
+
+            <p className="text-xs text-slate-400 pl-6">
+              {hasLimit
+                ? `La promo desaparecerá del escáner tras ${watchedMaxLeads} activaciones en 24h.`
+                : "Sin límite — la promo aparece siempre que tenga saldo y esté vigente."}
+            </p>
           </div>
 
           <div className="flex gap-3 pt-1">

@@ -10,6 +10,16 @@ export const promotionSchema = z
       .min(0, "La comisión no puede ser negativa"),
     valid_from: z.string().min(1, "La fecha de inicio es requerida"),
     valid_until: z.string().min(1, "La fecha de fin es requerida"),
+    /**
+     * Límite diario de activaciones. null = sin límite.
+     * undefined = campo no enviado (equivalente a null para el backend).
+     */
+    max_leads_per_day: z
+      .number({ error: "Debe ser un número entero" })
+      .int("Debe ser un número entero")
+      .min(1, "El límite mínimo es 1")
+      .nullable()
+      .optional(),
   })
   .refine(
     (data) => {

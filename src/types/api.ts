@@ -30,6 +30,15 @@ export interface Partner {
   timezone: string;
   /** Horarios de apertura por día. Ausente si nunca se configuraron. */
   opening_hours?: OpeningHours;
+  // ── REQ-1 ──────────────────────────────────────────────────────────────────
+  /** URL de la foto del negocio en el CDN. Null si no se ha subido imagen. */
+  image_url?: string | null;
+  // ── EXTRA ──────────────────────────────────────────────────────────────────
+  /** URL de la ficha de Google My Business / Google Maps del negocio. */
+  google_maps_url?: string | null;
+  // ── REQ-6 ──────────────────────────────────────────────────────────────────
+  /** Calificación del negocio. Null hasta que haya reseñas integradas. */
+  rating?: { score: number; count: number } | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -67,6 +76,9 @@ export interface Promotion {
   is_deleted: boolean;
   valid_from: string;
   valid_until: string;
+  // ── REQ-3 ──────────────────────────────────────────────────────────────────
+  /** Máximo de activaciones por ventana de 24h. Null = sin límite. */
+  max_leads_per_day: number | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -143,6 +155,8 @@ export interface CreatePromotionPayload {
   commission_per_lead: number;
   valid_from: string;
   valid_until: string;
+  /** Límite de activaciones por ventana de 24h. Null = sin límite. */
+  max_leads_per_day?: number | null;
 }
 
 // Promotions — PATCH /api/v1/partners/promotions/:id
@@ -176,6 +190,8 @@ export interface UpdateProfilePayload {
   contact_info?: ContactInfo;
   opening_hours?: OpeningHours;
   timezone?: string;
+  /** URL de Google Maps / Google My Business. Enviar null para eliminar. */
+  google_maps_url?: string | null;
 }
 
 // ─── Opening Hours ────────────────────────────────────────────────────────────

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Building2, Mail, Phone, MapPin, Globe, Save, Store } from "lucide-react";
+import { Building2, Mail, Phone, MapPin, Globe, Save, Store, MapPinned } from "lucide-react";
 import { useProfile, useUpdateProfile } from "@/lib/hooks/useProfile";
 import {
   profileSchema,
@@ -13,6 +13,8 @@ import {
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { OpeningHoursForm } from "@/components/portal/OpeningHoursForm";
+import { PartnerAvatar } from "@/components/portal/PartnerAvatar";
+import { PartnerRatingDisplay } from "@/components/portal/PartnerRatingDisplay";
 
 const CATEGORY_LABELS: Record<(typeof PARTNER_CATEGORIES)[number], string> = {
   restaurant: "Restaurante",
@@ -42,6 +44,7 @@ export default function ProfilePage() {
       phone: "",
       address: "",
       website: "",
+      google_maps_url: "",
     },
   });
 
@@ -55,6 +58,7 @@ export default function ProfilePage() {
         phone: partner.contact_info?.phone ?? "",
         address: partner.contact_info?.address ?? "",
         website: partner.contact_info?.website ?? "",
+        google_maps_url: partner.google_maps_url ?? "",
       });
     }
   }, [partner, reset]);
@@ -69,6 +73,8 @@ export default function ProfilePage() {
         address: values.address || undefined,
         website: values.website || undefined,
       },
+      // Enviar null para borrar el campo, o la URL si se proporcionó
+      google_maps_url: values.google_maps_url?.trim() || null,
     });
   };
 
@@ -114,6 +120,22 @@ export default function ProfilePage() {
           >
             {partner?.status === "active" ? "Activo" : "Inactivo"}
           </span>
+        </div>
+      </div>
+
+      {/* Tarjeta de identidad del negocio — avatar + calificación (REQ-1, REQ-6) */}
+      <div className="flex items-center gap-4 bg-white border border-slate-100 rounded-2xl shadow-sm px-5 py-4 mb-6">
+        <PartnerAvatar
+          imageUrl={partner?.image_url}
+          businessName={partner?.business_name ?? ""}
+          size="lg"
+        />
+        <div className="flex flex-col gap-1 min-w-0">
+          <p className="text-lg font-bold text-slate-900 truncate">
+            {partner?.business_name}
+          </p>
+          <p className="text-sm text-slate-400 capitalize">{partner?.category}</p>
+          <PartnerRatingDisplay rating={partner?.rating} />
         </div>
       </div>
 
@@ -201,6 +223,21 @@ export default function ProfilePage() {
                     {...register("website")}
                   />
                 </div>
+                {/* Google Maps / Google My Business — EXTRA */}
+                <div className="relative">
+                  <MapPinned className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none mt-px" />
+                  <Input
+                    placeholder="Ficha de Google Maps (https://maps.app.goo.gl/...)"
+                    className="pl-9"
+                    error={errors.google_maps_url?.message}
+                    {...register("google_maps_url")}
+                  />
+                </div>
+                {!errors.google_maps_url && (
+                  <p className="text-xs text-slate-400 -mt-1">
+                    Los pasajeros verán un enlace a tu negocio en Google Maps desde la app.
+                  </p>
+                )}
               </div>
             </div>
 
