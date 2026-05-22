@@ -13,6 +13,7 @@ import {
 import { callRegister } from "@/lib/api/auth";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { AlertTriangle, MapPin, Map } from "lucide-react";
 
 const CATEGORIES = [
   { value: "restaurant", label: "Restaurante" },
@@ -267,14 +268,41 @@ export function RegisterForm() {
               promociones en el momento correcto.
             </p>
 
-            <div className="rounded-2xl border-2 border-dashed border-slate-200 p-6 text-center flex flex-col items-center gap-3">
+            <div className="flex gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3">
+              <AlertTriangle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+              <div className="flex flex-col gap-1">
+                <p className="text-sm font-semibold text-amber-800">
+                  Debes estar en tu local físico
+                </p>
+                <p className="text-xs text-amber-700">
+                  Captura la ubicación desde el establecimiento, no desde tu
+                  casa u otro lugar. Los pasajeros verán tu negocio en el mapa
+                  según las coordenadas registradas aquí.
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={`rounded-2xl border-2 p-6 text-center flex flex-col items-center gap-3 transition-colors duration-300 ${
+                locationValue
+                  ? "border-teal-400 bg-teal-50"
+                  : "border-dashed border-slate-200"
+              }`}
+            >
               {locationValue ? (
                 <>
-                  <div className="text-4xl">📍</div>
-                  <p className="text-sm font-medium text-teal-700">
-                    Ubicación capturada
-                  </p>
-                  <p className="text-xs text-slate-500 font-mono">
+                  <div className="flex items-center justify-center w-14 h-14 rounded-full bg-teal-100">
+                    <MapPin className="w-7 h-7 text-teal-600" />
+                  </div>
+                  <div className="flex flex-col gap-0.5">
+                    <p className="text-base font-semibold text-teal-700">
+                      ¡Ubicación capturada!
+                    </p>
+                    <p className="text-xs text-teal-600">
+                      Tu local quedó registrado correctamente.
+                    </p>
+                  </div>
+                  <p className="text-xs text-slate-500 font-mono bg-white border border-slate-200 rounded-lg px-3 py-1.5">
                     {locationLabel}
                   </p>
                   <Button
@@ -288,7 +316,7 @@ export function RegisterForm() {
                 </>
               ) : (
                 <>
-                  <div className="text-4xl">🗺️</div>
+                  <Map className="w-10 h-10 text-slate-300" />
                   <p className="text-sm text-slate-600">
                     Presiona para detectar tu ubicación actual
                   </p>
