@@ -7,7 +7,7 @@ export const promotionSchema = z
     reward_value: z.string().min(1, "El beneficio es requerido"),
     commission_per_lead: z
       .number({ error: "Debe ser un número" })
-      .min(0, "La comisión no puede ser negativa"),
+      .min(150, "La comisión mínima es $150"),
     valid_from: z.string().min(1, "La fecha de inicio es requerida"),
     valid_until: z.string().min(1, "La fecha de fin es requerida"),
     /**

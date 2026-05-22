@@ -148,9 +148,9 @@ export function PromotionForm({
           <Input
             label="Comisión por lead ($)"
             type="number"
-            min={0}
-            step="0.01"
-            placeholder="5.00"
+            min={150}
+            step="10"
+            placeholder="150.00"
             error={errors.commission_per_lead?.message}
             {...register("commission_per_lead", { valueAsNumber: true })}
           />
