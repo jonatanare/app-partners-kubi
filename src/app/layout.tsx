@@ -15,8 +15,12 @@ export const metadata: Metadata = {
     "Convierte el tráfico de la ciudad en clientes en tu mesa. Plataforma de afiliados Kubi para restaurantes, bares y más.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.svg",
-    apple: "/icons/apple-touch-icon.svg",
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
+    ],
+    apple: [
+      { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
