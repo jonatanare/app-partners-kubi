@@ -9,7 +9,7 @@ const serwist = new Serwist({
   runtimeCaching: [
     // Coupon validation — always fetch fresh data (must never serve stale)
     {
-      matcher: /^https:\/\/partners\.getkubi\.com\/portal\/validate/,
+      matcher: /^https:\/\/partners\.getkubi\.app\/portal\/validate/,
       handler: new NetworkFirst({
         cacheName: "validate-page",
         networkTimeoutSeconds: 5,
@@ -17,7 +17,7 @@ const serwist = new Serwist({
     },
     // Dashboard & promotions — show cached, update in background
     {
-      matcher: /^https:\/\/partners\.getkubi\.com\/portal\/(dashboard|promotions|profile)/,
+      matcher: /^https:\/\/partners\.getkubi\.app\/portal\/(dashboard|promotions|profile)/,
       handler: new StaleWhileRevalidate({
         cacheName: "portal-pages",
       }),
