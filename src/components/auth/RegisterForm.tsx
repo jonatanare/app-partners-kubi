@@ -13,15 +13,8 @@ import {
 import { callRegister } from "@/lib/api/auth";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { CATEGORY_OPTIONS } from "@/lib/constants/categories";
 import { AlertTriangle, MapPin, Map } from "lucide-react";
-
-const CATEGORIES = [
-  { value: "restaurant", label: "Restaurante" },
-  { value: "bar", label: "Bar / Cantina" },
-  { value: "cafe", label: "Café / Cafetería" },
-  { value: "tour", label: "Tour / Experiencia" },
-  { value: "other", label: "Otro" },
-] as const;
 
 const STEP_FIELDS: Record<number, (keyof RegisterFormData)[]> = {
   1: ["business_name", "category", "manager_name"],
@@ -160,7 +153,7 @@ export function RegisterForm() {
                 {...register("category")}
               >
                 <option value="">Selecciona una categoría</option>
-                {CATEGORIES.map((c) => (
+                {CATEGORY_OPTIONS.map((c) => (
                   <option key={c.value} value={c.value}>
                     {c.label}
                   </option>

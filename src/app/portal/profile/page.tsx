@@ -7,22 +7,17 @@ import { Building2, Mail, Phone, MapPin, Globe, Save, Store, MapPinned } from "l
 import { useProfile, useUpdateProfile } from "@/lib/hooks/useProfile";
 import {
   profileSchema,
-  PARTNER_CATEGORIES,
   type ProfileFormValues,
 } from "@/lib/schemas/profileSchema";
+import {
+  PARTNER_CATEGORIES,
+  PARTNER_CATEGORY_LABELS as CATEGORY_LABELS,
+} from "@/lib/constants/categories";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { OpeningHoursForm } from "@/components/portal/OpeningHoursForm";
 import { PartnerAvatar } from "@/components/portal/PartnerAvatar";
 import { PartnerRatingDisplay } from "@/components/portal/PartnerRatingDisplay";
-
-const CATEGORY_LABELS: Record<(typeof PARTNER_CATEGORIES)[number], string> = {
-  restaurant: "Restaurante",
-  bar: "Bar",
-  cafe: "Café",
-  tour: "Tour / Experiencia",
-  other: "Otro",
-};
 
 export default function ProfilePage() {
   const { data, isLoading, isError } = useProfile();
