@@ -1,12 +1,8 @@
 import z from "zod";
+import { PARTNER_CATEGORIES } from "@/lib/constants/categories";
 
-export const PARTNER_CATEGORIES = [
-  "restaurant",
-  "bar",
-  "cafe",
-  "tour",
-  "other",
-] as const;
+// Re-exported for existing importers (e.g. the profile page).
+export { PARTNER_CATEGORIES };
 
 export const profileSchema = z.object({
   business_name: z.string().min(2, "Mínimo 2 caracteres"),

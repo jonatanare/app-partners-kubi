@@ -1,12 +1,10 @@
 import { z } from "zod";
+import { PARTNER_CATEGORIES } from "@/lib/constants/categories";
 
 // ─── Step 1: Business identity ──────────────────────────────────────────────
 export const step1Schema = z.object({
   business_name: z.string().min(2, "Mínimo 2 caracteres"),
-  category: z.enum(
-    ["restaurant", "bar", "cafe", "tour", "other"] as const,
-    { error: "Selecciona una categoría" }
-  ),
+  category: z.enum(PARTNER_CATEGORIES, { error: "Selecciona una categoría" }),
   manager_name: z.string().min(2, "Mínimo 2 caracteres"),
 });
 
